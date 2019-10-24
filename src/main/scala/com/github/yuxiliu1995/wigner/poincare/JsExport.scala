@@ -1,5 +1,7 @@
 package com.github.yuxiliu1995.wigner.poincare
 
+import com.github.yuxiliu1995.wigner.CanvasDim
+import com.github.yuxiliu1995.wigner.poincare.functions.draw.DrawFunctions
 import org.scalajs.dom
 import org.scalajs.dom.html
 
@@ -14,7 +16,12 @@ object JsExport {
     */
   @JSExport
   def main(canvas: html.Canvas): Unit = {
+    
     val ctx: dom.CanvasRenderingContext2D = canvas.getContext("2d").asInstanceOf[dom.CanvasRenderingContext2D]
+    val canvasDim: CanvasDim = CanvasDim(canvas.width, canvas.height)
+    
+    // Initialise the canvas
+    DrawFunctions.draw(ctx, canvasDim)
     
     canvas.onmousedown = (_: dom.MouseEvent) => ()
     canvas.onmouseup = (_: dom.MouseEvent) => ()
