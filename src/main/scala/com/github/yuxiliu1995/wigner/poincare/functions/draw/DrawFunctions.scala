@@ -1,5 +1,6 @@
 package com.github.yuxiliu1995.wigner.poincare.functions.draw
 
+import com.github.yuxiliu1995.wigner.poincare.JsExport.smallRadius
 import com.github.yuxiliu1995.wigner.poincare.util.ConfigProvider.config
 import com.github.yuxiliu1995.wigner.{CanvasDim, Point}
 import org.scalajs.dom
@@ -11,9 +12,6 @@ object DrawFunctions {
   
   /** Radius of the large circle, in pixels. */
   private val largeRadius: Int = config.getInt("size.largeRadius")
-  
-  /** Radius of the small circle, in pixels. */
-  private val smallRadius: Int = config.getInt("size.smallRadius")
   
   /** Colour of the large circle. */
   private val largeCircleColour: String = config.getString("colour.largeCircle")

@@ -3,7 +3,8 @@ package com.github.yuxiliu1995.wigner.poincare
 import com.github.yuxiliu1995.wigner.{CanvasDim, Point}
 import com.github.yuxiliu1995.wigner.poincare.functions.draw.DrawFunctions
 import com.github.yuxiliu1995.wigner.poincare.functions.state.StateFunctions
-import com.github.yuxiliu1995.wigner.poincare.functions.state.StateFunctions.dragState
+import com.github.yuxiliu1995.wigner.poincare.functions.state.StateFunctions.{dragState, smallCentre}
+import com.github.yuxiliu1995.wigner.poincare.util.ConfigProvider.config
 import org.scalajs.dom
 import org.scalajs.dom.{html, raw}
 
@@ -11,6 +12,9 @@ import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel}
 
 @JSExportTopLevel("Poincare")
 object JsExport {
+  
+  /** Radius of the small circle, in pixels. */
+  val smallRadius: Int = config.getInt("size.smallRadius")
   
   /** Returns the position of the mouse on the canvas, to the nearest pixel.
     *
@@ -35,17 +39,24 @@ object JsExport {
     val rect: raw.ClientRect = canvas.getBoundingClientRect
     
     // Initialise the canvas
-    DrawFunctions.draw(ctx, canvasDim, canvasDim.centroid)
+    StateFunctions.initialiseSmallCentre(canvasDim)
+    DrawFunctions.draw(ctx, canvasDim, smallCentre)
     
-    // Drag the small circle when the mouse is held down
-    canvas.onmousedown = (_: dom.MouseEvent) => StateFunctions.updateMouseDown()
+    // Start dragging the small circle when the mouse begins to be held down while the cursor is on it
+    canvas.onmousedown = (event: dom.MouseEvent) => {
+      val cursor: Point = getCursor(event, rect)
+      StateFunctions.updateMouseDown(cursor)
+    }
+    
+    // Stop dragging the small circle when the mouse is released
     canvas.onmouseup = (_: dom.MouseEvent) => StateFunctions.updateMouseUp()
     
     // When the mouse moves while the small circle is being dragged,
     // re-draw the canvas with the small circle under the cursor
     canvas.onmousemove = (event: dom.MouseEvent) => if (dragState) {
       val cursor: Point = getCursor(event, rect)
-      DrawFunctions.draw(ctx, canvasDim, cursor)
+      StateFunctions.updateSmallCentre(cursor)
+      DrawFunctions.draw(ctx, canvasDim, smallCentre)
     }
   }
 }
