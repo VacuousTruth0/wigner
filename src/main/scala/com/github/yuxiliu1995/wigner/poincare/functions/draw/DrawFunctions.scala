@@ -12,8 +12,24 @@ object DrawFunctions {
   /** Radius of the large circle, in pixels. */
   private val largeRadius: Int = config.getInt("size.largeRadius")
   
+  /** Radius of the small circle, in pixels. */
+  private val smallRadius: Int = config.getInt("size.smallRadius")
+  
   /** Colour of the large circle. */
   private val largeCircleColour: String = config.getString("colour.largeCircle")
+  
+  /** Colour of the small circle. */
+  private val smallCircleColour: String = config.getString("colour.smallCircle")
+  
+  /** Clears the canvas.
+    *
+    * @param ctx       Rendering context for the canvas.
+    * @param canvasDim Canvas dimensions.
+    */
+  private def clear(ctx: dom.CanvasRenderingContext2D, canvasDim: CanvasDim): Unit = {
+    import canvasDim.{height, width}
+    ctx.clearRect(0, 0, width, height)
+  }
   
   /** Draws a filled-in circle on the canvas.
     *
@@ -34,8 +50,11 @@ object DrawFunctions {
     *
     * @param ctx       Rendering context for the canvas.
     * @param canvasDim Canvas dimensions.
+    * @param cursor    Position of the cursor on the canvas, to the nearest pixel.
     */
-  def draw(ctx: dom.CanvasRenderingContext2D, canvasDim: CanvasDim): Unit = {
+  def draw(ctx: dom.CanvasRenderingContext2D, canvasDim: CanvasDim, cursor: Point): Unit = {
+    clear(ctx, canvasDim)
     drawCircle(ctx, canvasDim.centroid, largeRadius, largeCircleColour)
+    drawCircle(ctx, cursor, smallRadius, smallCircleColour)
   }
 }
