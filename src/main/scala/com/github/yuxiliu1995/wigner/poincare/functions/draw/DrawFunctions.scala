@@ -1,6 +1,6 @@
 package com.github.yuxiliu1995.wigner.poincare.functions.draw
 
-import com.github.yuxiliu1995.wigner.poincare.JsExport.smallRadius
+import com.github.yuxiliu1995.wigner.poincare.JsExport.{getLargeCentre, largeRadius, smallRadius}
 import com.github.yuxiliu1995.wigner.poincare.util.ConfigProvider.config
 import com.github.yuxiliu1995.wigner.{CanvasDim, Point}
 import org.scalajs.dom
@@ -9,9 +9,6 @@ import scala.math.Pi
 
 /** Contains functions used to update the canvas. */
 object DrawFunctions {
-  
-  /** Radius of the large circle, in pixels. */
-  private val largeRadius: Int = config.getInt("size.largeRadius")
   
   /** Colour of the large circle. */
   private val largeCircleColour: String = config.getString("colour.largeCircle")
@@ -51,8 +48,10 @@ object DrawFunctions {
     * @param cursor    Position of the cursor on the canvas, to the nearest pixel.
     */
   def draw(ctx: dom.CanvasRenderingContext2D, canvasDim: CanvasDim, cursor: Point): Unit = {
+    val largeCentre: Point = getLargeCentre(canvasDim)
+    
     clear(ctx, canvasDim)
-    drawCircle(ctx, canvasDim.centroid, largeRadius, largeCircleColour)
+    drawCircle(ctx, largeCentre, largeRadius, largeCircleColour)
     drawCircle(ctx, cursor, smallRadius, smallCircleColour)
   }
 }

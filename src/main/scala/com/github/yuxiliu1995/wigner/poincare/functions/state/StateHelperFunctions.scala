@@ -20,4 +20,23 @@ private[state] object StateHelperFunctions {
     val distanceSquared = Seq(xDiff, yDiff).map(pow(_, 2)).sum
     sqrt(distanceSquared)
   }
+  
+  /** Returns the nearest point on a circle to the input point.
+    *
+    * This will be the input point if it is on the circle.
+    *
+    * Otherwise, the distance from the centre of the circle to the input point
+    * is scaled to the radius of the circle.
+    *
+    * @param p      Point on the canvas.
+    * @param centre Centre of the circle.
+    * @param radius Radius of the circle.
+    */
+  def nearestCirclePoint(p: Point, centre: Point, radius: Int): Point = {
+    val distanceFromCentre = distance(p, centre)
+    if (distanceFromCentre <= radius) p else {
+      val fromCentre = (p - centre) * (radius / distanceFromCentre)
+      fromCentre + centre
+    }
+  }
 }

@@ -13,8 +13,17 @@ import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel}
 @JSExportTopLevel("Poincare")
 object JsExport {
   
+  /** Radius of the large circle, in pixels. */
+  val largeRadius: Int = config.getInt("size.largeRadius")
+  
   /** Radius of the small circle, in pixels. */
   val smallRadius: Int = config.getInt("size.smallRadius")
+  
+  /** Returns the position of the centre of the large circle on the canvas.
+    *
+    * @param canvasDim Canvas dimensions.
+    */
+  def getLargeCentre(canvasDim: CanvasDim): Point = canvasDim.centroid
   
   /** Returns the position of the mouse on the canvas, to the nearest pixel.
     *
@@ -55,7 +64,7 @@ object JsExport {
     // re-draw the canvas with the small circle under the cursor
     canvas.onmousemove = (event: dom.MouseEvent) => if (dragState) {
       val cursor: Point = getCursor(event, rect)
-      StateFunctions.updateSmallCentre(cursor)
+      StateFunctions.updateSmallCentre(cursor, canvasDim)
       DrawFunctions.draw(ctx, canvasDim, smallCentre)
     }
   }

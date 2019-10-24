@@ -1,7 +1,7 @@
 package com.github.yuxiliu1995.wigner.poincare.functions.state
 
-import com.github.yuxiliu1995.wigner.poincare.JsExport.smallRadius
-import com.github.yuxiliu1995.wigner.poincare.functions.state.StateHelperFunctions.distance
+import com.github.yuxiliu1995.wigner.poincare.JsExport.{getLargeCentre, largeRadius, smallRadius}
+import com.github.yuxiliu1995.wigner.poincare.functions.state.StateHelperFunctions.{distance, nearestCirclePoint}
 import com.github.yuxiliu1995.wigner.{CanvasDim, Point}
 
 /** Contains the program state, and functions used to access and update it. */
@@ -35,12 +35,14 @@ object StateFunctions {
   
   /** Update the position of the centre of the small circle.
     *
-    * Its new position will be at the cursor.
+    * Its new position will be at the nearest point on the large circle to the cursor.
     *
-    * @param cursor Position of the cursor on the canvas.
+    * @param cursor    Position of the cursor on the canvas.
+    * @param canvasDim Canvas dimensions.
     */
-  def updateSmallCentre(cursor: Point): Unit = {
-    State.smallCentre = cursor
+  def updateSmallCentre(cursor: Point, canvasDim: CanvasDim): Unit = {
+    val largeCentre: Point = getLargeCentre(canvasDim)
+    State.smallCentre = nearestCirclePoint(cursor, largeCentre, largeRadius)
   }
   
   /** Updates the drag state when the mouse begins to be held down while the cursor is on the small circle. */

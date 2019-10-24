@@ -4,7 +4,7 @@ organization := "com.github.yuxiliu1995"
 
 name := "wigner"
 
-version := "0.1-SNAPSHOT"
+version := "0.1"
 
 scalaVersion := "2.12.8"
 
