@@ -2,6 +2,8 @@ package com.github.yuxiliu1995.wigner.poincare
 
 import com.github.yuxiliu1995.wigner.{CanvasDim, Point}
 import com.github.yuxiliu1995.wigner.poincare.functions.draw.DrawFunctions
+import com.github.yuxiliu1995.wigner.poincare.functions.state.StateFunctions
+import com.github.yuxiliu1995.wigner.poincare.functions.state.StateFunctions.dragState
 import org.scalajs.dom
 import org.scalajs.dom.{html, raw}
 
@@ -35,11 +37,13 @@ object JsExport {
     // Initialise the canvas
     DrawFunctions.draw(ctx, canvasDim, canvasDim.centroid)
     
-    canvas.onmousedown = (_: dom.MouseEvent) => ()
-    canvas.onmouseup = (_: dom.MouseEvent) => ()
+    // Drag the small circle when the mouse is held down
+    canvas.onmousedown = (_: dom.MouseEvent) => StateFunctions.updateMouseDown()
+    canvas.onmouseup = (_: dom.MouseEvent) => StateFunctions.updateMouseUp()
     
-    // When the mouse moves, re-draw the canvas with the small circle under the cursor
-    canvas.onmousemove = (event: dom.MouseEvent) => {
+    // When the mouse moves while the small circle is being dragged,
+    // re-draw the canvas with the small circle under the cursor
+    canvas.onmousemove = (event: dom.MouseEvent) => if (dragState) {
       val cursor: Point = getCursor(event, rect)
       DrawFunctions.draw(ctx, canvasDim, cursor)
     }
